@@ -63,6 +63,7 @@ module.exports = function(context) {
   highpass.frequency.value = 600;
 
   audioNode.start = function(when) {
+    when = when || context.currentTime;
     clapDecay.gain.setValueAtTime(0.0001, when);
     clapDecay.gain.exponentialRampToValueAtTime(1, when + 0.001);
     clapDecay.gain.linearRampToValueAtTime(1, when + clapLength);
