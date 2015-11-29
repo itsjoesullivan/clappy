@@ -1,6 +1,6 @@
 ##Usage
 
-`npm install --save-dev clappy`
+`npm install --save clappy`
 
 ```javascript
 var clappy = require('clappy');
