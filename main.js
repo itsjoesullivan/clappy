@@ -1,6 +1,8 @@
 var context = new AudioContext();
-var clappy = require('./index');
+var Clappy = require('./index');
+var clap = Clappy(context);
 document.getElementById('clap').addEventListener('click', function(e) {
-  var clap = clappy(context);
-  clap.start(context.currentTime);
+  var node = clap();
+  node.connect(context.destination);
+  node.start(context.currentTime);
 });
