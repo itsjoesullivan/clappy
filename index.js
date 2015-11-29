@@ -1,13 +1,6 @@
+var NoiseBuffer = require('noise-buffer');
+
 module.exports = function(context) {
-
-  // courtesy of http://noisehack.com/generate-noise-web-audio-api/
-  var bufferSize = 2 * context.sampleRate;
-  var noiseBuffer = context.createBuffer(1, bufferSize, context.sampleRate);
-  var output = noiseBuffer.getChannelData(0);
-  for (var i = 0; i < bufferSize; i++) {
-    output[i] = Math.random() * 2 - 1;
-  }
-
   // A few parameters
   // Overall length of the clap
   var length = 1.2;
@@ -22,7 +15,7 @@ module.exports = function(context) {
   var audioNode = context.createGain();
 
   var noise = context.createBufferSource();
-  noise.buffer = noiseBuffer;
+  noise.buffer = NoiseBuffer(length);
 
   var clapsGain = context.createGain();
   var clapDecay = context.createGain();
