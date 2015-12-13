@@ -83,9 +83,12 @@ module.exports = function(context) {
 };
 
 },{"noise-buffer":3}],2:[function(require,module,exports){
-var context = new AudioContext();
 var Clappy = require('./index');
+
+var context = new AudioContext();
+
 var clap = Clappy(context);
+
 document.getElementById('clap').addEventListener('click', function(e) {
   var node = clap();
   node.connect(context.destination);
