@@ -69,11 +69,15 @@ module.exports = function(context) {
 
       lfo.start(when);
       noise.start(when);
+
+      lfo.stop(when + duration);
+      noise.stop(when + duration);
     };
 
     audioNode.stop = function(when) {
 
-      noise.stop(when);
+      lfo.stop(when + duration);
+      noise.stop(when + duration);
     };
 
     return audioNode;
