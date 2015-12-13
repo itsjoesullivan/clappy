@@ -70,14 +70,13 @@ module.exports = function(context) {
       lfo.start(when);
       noise.start(when);
 
-      lfo.stop(when + duration);
-      noise.stop(when + duration);
+      audioNode.stop(when + duration);
     };
 
     audioNode.stop = function(when) {
 
-      lfo.stop(when + duration);
-      noise.stop(when + duration);
+      lfo.stop(when);
+      noise.stop(when);
     };
 
     return audioNode;
