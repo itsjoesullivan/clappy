@@ -4,7 +4,8 @@
   "description": "A web audio module for synthesizing claps",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "watchify main.js -o bundle.js"
   },
   "keywords": [
     "web",
@@ -13,5 +14,8 @@
     "clap"
   ],
   "author": "itsjoesullivan",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "noise-buffer": "^1.0.0"
+  }
 }
