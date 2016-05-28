@@ -16,6 +16,6 @@
   "author": "itsjoesullivan",
   "license": "ISC",
   "dependencies": {
-    "noise-buffer": "^1.0.0"
+    "noise-buffer": "^2"
   }
 }

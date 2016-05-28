@@ -18,6 +18,8 @@ module.exports = function(context) {
   highpass.frequency.value = 600;
   bandpass.connect(highpass);
 
+  var playingNodes = [];
+
   return function() {
 
     /*
@@ -31,8 +33,18 @@ module.exports = function(context) {
       room.
     */
 
-
     var audioNode = context.createGain();
+
+
+    var preChoke = context.createGain();
+    preChoke.gain.value = 0;
+    var postChoke = context.createGain();
+    postChoke.gain.value = 0;
+
+    preChoke.connect(bandpass);
+    postChoke.connect(audioNode);
+
+
 
     var noise = context.createBufferSource();
     noise.buffer = buffer;
@@ -53,14 +65,26 @@ module.exports = function(context) {
 
     noise.connect(clapDryEnvelope);
     clapDryEnvelope.connect(lfoCarrier);
-    lfoCarrier.connect(bandpass);
+    lfoCarrier.connect(preChoke);
 
     noise.connect(clapDecayEnvelope);
-    clapDecayEnvelope.connect(bandpass);
+    clapDecayEnvelope.connect(preChoke);
 
-    highpass.connect(audioNode);
+    highpass.connect(postChoke);
+
+
 
     audioNode.start = function(when) {
+
+      while (playingNodes.length) {
+        playingNodes.pop().stop(when);
+      }
+      playingNodes.push(audioNode);
+
+      preChoke.gain.setValueAtTime(0, when + 0.0001);
+      preChoke.gain.linearRampToValueAtTime(1, when + 0.0002);
+      postChoke.gain.setValueAtTime(0, when + 0.0001);
+      postChoke.gain.linearRampToValueAtTime(1, when + 0.0002);
 
       clapDryEnvelope.gain.setValueAtTime(0.0001, when);
       clapDryEnvelope.gain.exponentialRampToValueAtTime(1, when + 0.001);
@@ -80,9 +104,20 @@ module.exports = function(context) {
       noise.start(when, Math.random() * noise.buffer.duration);
       noise.stop(when + duration);
       audioNode.gain.setValueAtTime(0, when + duration);
+
+      noise.onended = function() {
+        audioNode.disconnect();
+      };
+
     };
 
     audioNode.stop = function(when) {
+      preChoke.gain.setValueAtTime(1, when);
+      preChoke.gain.linearRampToValueAtTime(0, when + 0.0001);
+      postChoke.gain.setValueAtTime(1, when);
+      postChoke.gain.linearRampToValueAtTime(0, when + 0.0001);
+
+
       try {
         lfo.stop(when);
       } catch(e) {
