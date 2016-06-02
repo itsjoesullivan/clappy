@@ -59,7 +59,7 @@ module.exports = function(context) {
     var lfoCarrier = context.createGain();
     var lfo = context.createOscillator();
     lfo.type = "sawtooth";
-    lfo.frequency.value = -clapFrequency;
+    lfo.frequency.value = clapFrequency;
     lfo.connect(lfoCarrier.gain);
 
 
